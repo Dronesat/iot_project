@@ -21,7 +21,7 @@ def run_face_detection(confidence_threadshold = 91):
     timeout = 20
     start_time = time.time()
     isFace = None
-    confidence = None  
+    confidence = 0.0  
 
     while time.time() - start_time < timeout:
         success, frame = cap.read()

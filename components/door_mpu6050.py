@@ -28,7 +28,7 @@ _, gyro_data, _ = read_sensor_data()  # Read initial gyro data
 initial_gyro_x = gyro_data['x']  # Store the initial gyro reading for offset
 
 # Threshold for angular velocity 
-movement_threshold = 3  # Degrees per second
+movement_threshold = 2.5  # Degrees per second
 dt = 0.2
 
 # Complementary Filter Parameters 
