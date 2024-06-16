@@ -2,8 +2,8 @@ import gpiod
 import time
 
 class DoorStateHCSR04:
-    def __init__(self, trig_pin, echo_pin, threshold_distance=4):
-        self.chip = gpiod.Chip('gpiochip4')
+    def __init__(self, trig_pin, echo_pin, gpio_chip='gpiochip4', threshold_distance=4):
+        self.chip = gpiod.Chip(gpio_chip)
         self.trig_line = self.chip.get_line(trig_pin)
         self.echo_line = self.chip.get_line(echo_pin)
         self.trig_line.request(consumer='hc-sr04-trig', type=gpiod.LINE_REQ_DIR_OUT, default_val=0)
@@ -45,9 +45,9 @@ class DoorStateHCSR04:
             return round(distance, 2)
 
         except (OSError, ValueError) as error:
-            print(f"HC-SR04: Error measuring distance. {error}")
+            #print(f"HC-SR04: Error measuring distance. {error}")
             return None
-
+        
     def get_door_state(self):
         current_distance = self.get_distance()
 
@@ -85,7 +85,8 @@ if __name__ == "__main__":
     try:
         while True:
             door_state = sensor.get_door_state()
-            print(f"Door state: {door_state}")
+            distance = sensor.get_distance()
+            print(f"Door state: {door_state}, Distance: {distance}")
             time.sleep(1)
     except KeyboardInterrupt:
         print("Stopped by User")
