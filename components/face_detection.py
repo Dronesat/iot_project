@@ -3,60 +3,93 @@ import cv2
 from cvzone import FaceDetectionModule
 import time
 import warnings
+from .oled_display import OLEDDisplay
 
 warnings.filterwarnings("ignore", category=UserWarning)
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
-def run_face_detection(confidence_threadshold = 91):
-    detector = FaceDetectionModule.FaceDetector()
-    cap = cv2.VideoCapture(0)
-    cap.set(cv2.CAP_PROP_FRAME_WIDTH, 320)
-    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 240)
-    cap.set(cv2.CAP_PROP_FPS, 10)
+class FaceDetection:
+    def __init__(self, confidence_threshold=90, timeout=20, width=320, height=240, fps=10):
+        """
+        Initialise the FaceDetection object with given parameters.
+        
+        :param confidence_threshold: Confidence threshold for face detection %.
+        :param timeout: Timeout for the face detection process (seconds).
+        :param width: Width of the video frame.
+        :param height: Height of the video frame.
+        :param fps: Frames per second for the video capture.
+        """
+        self.confidence_threshold = confidence_threshold
+        self.timeout = timeout
+        self.width = width
+        self.height = height
+        self.fps = fps
+        self.detector = FaceDetectionModule.FaceDetector()
+        self.oled_display = OLEDDisplay()
 
-    if not cap.isOpened():
-        print("Error: Could not open USB camera")
-        return
+    def run_detection(self):
+        """
+        Run the face detection process.
+        
+        :return: Tuple containing face detection result ('yes' or 'no') and confidence %.
+        """
+        cap = cv2.VideoCapture(0)  # Initialize the camera
+        cap.set(cv2.CAP_PROP_FRAME_WIDTH, self.width)
+        cap.set(cv2.CAP_PROP_FRAME_HEIGHT, self.height)
+        cap.set(cv2.CAP_PROP_FPS, self.fps)
 
-    timeout = 20
-    start_time = time.time()
-    isFace = None
-    confidence = None  
+        if not cap.isOpened():
+            print("Error: Could not open USB camera")
+            return None, 0.0
 
-    while time.time() - start_time < timeout:
-        success, frame = cap.read()
-        if not success:
-            print("Error: Could not read frame from USB camera")
-            continue
+        start_time = time.time()
+        is_face = None
+        confidence = 0.0
 
-        frame, faces = detector.findFaces(frame, draw=True)
+        try:
+            while time.time() - start_time < self.timeout:
+                success, frame = cap.read()
+                if not success:
+                    print("Error: Could not read frame from USB camera")
+                    continue
 
-        if faces:
-            confidence = round(faces[0]['score'][0] * 100, 1)
-            if confidence >= confidence_threadshold:
-                isFace = 'yes'
-                break
-            else: isFace = 'no'
-            
-        else:
-            isFace = 'no'
+                frame, faces = self.detector.findFaces(frame, draw=True)
 
-        dynamic_print(f"Face detected: {isFace} (Time elapsed: {time.time() - start_time:.1f} seconds)")
-        cv2.imshow("Face Detection", frame)
-        if cv2.waitKey(1) == ord('q'):
-            break
+                if faces:
+                    confidence = round(faces[0]['score'][0] * 100, 1)
+                    if confidence >= self.confidence_threshold:
+                        is_face = 'yes'
+                        break
+                    else:
+                        is_face = 'no'
+                else:
+                    is_face = 'no'
 
-    cap.release()
-    cv2.destroyAllWindows()
-    return isFace, confidence
+                # Update display and print status every second
+                elapsed_time = time.time() - start_time
+                if int(elapsed_time) % 1 == 0:
+                    self.dynamic_print(f"Detecting time elapsed: {elapsed_time:.1f} seconds")
+                    self.oled_display.update_display(f"Detecting Faces", f"Timeout: {self.timeout}s", f"Elapsed: {elapsed_time:.1f}s")
 
-def dynamic_print(input):
-    output_text = f"{input}   "
-    sys.stdout.write("\r" + output_text)
-    sys.stdout.flush()
+                cv2.imshow("Face Detection", frame)
+                if cv2.waitKey(1) == ord('q'):
+                    break
+
+        finally:
+            cap.release()  # Release the camera
+            cv2.destroyAllWindows() # Close program
+
+        return is_face, confidence
+
+    @staticmethod
+    def dynamic_print(message):
+        output_text = f"{message}   "
+        sys.stdout.write("\r" + output_text)
+        sys.stdout.flush()
 
 if __name__ == "__main__":
-    result, confidence = run_face_detection()
+    face_detection = FaceDetection()
+    result, confidence = face_detection.run_detection()
     if result is not None:
         print(f"\nFinal result: Face detected: {result}")
         if confidence is not None:

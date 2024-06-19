@@ -2,8 +2,9 @@ import sys
 import time
 import json
 import paho.mqtt.client as mqtt
-from components import door_mpu6050, door_hcsr04, face_detection
+from components import door_mpu6050, face_detection
 from components.oled_display import OLEDDisplay
+from components.door_hcsr04 import DoorStateHCSR04
 
 # MQTT Broker Configuration
 mqtt_server = "192.168.1.39"
@@ -20,8 +21,9 @@ occupancy_status = "no"  # Default occupancy status
 face_status = "no"
 face_confidence = 0
 
-# Initialize OLED display
+# Initialize 
 display = OLEDDisplay()
+door_state_sensor = DoorStateHCSR04(23, 24)
 
 # MQTT Functions
 def on_connect(client, userdata, flags, rc):
@@ -49,9 +51,11 @@ def publish_door_event(event_type, face_status, confidence, occupancy_changed):
 
 def update_display():
     global occupancy_status, face_status, face_confidence, previous_door_state
-    door_state = "open" if previous_door_state == 'open' else "closed"
+    door_state = "closed" if previous_door_state == 'open' else "open"
     face_display = f"Face: {face_status.capitalize()} ({face_confidence:.1f}%)"
     display.update_display(f"Occupancy: {occupancy_status.capitalize()}", f"Door: {door_state.capitalize()}", face_display)
+    print(f"Display updated: Occupancy: {occupancy_status.capitalize()}, Door: {door_state.capitalize()}, {face_display}")
+    print(f"Prev door state: {previous_door_state}")
 
 # MQTT client setup and start
 client = mqtt.Client()
@@ -62,28 +66,31 @@ client.connect(mqtt_server, mqtt_port)
 client.loop_start() 
 
 def handle_door_event(previous_state, current_state):
-    global occupancy_changed, face_status, face_confidence
+    global occupancy_changed, face_status, face_confidence, previous_door_state
     time.sleep(0.08)  
     if door_mpu6050.get_door_motion() != 'moving':
         return  # Return if door is not in motion
 
     face_result, confidence = face_detection.run_face_detection(95)
-    if face_result is None:
-        return  # Return if face detection failed
+    if face_result is None: # Return if face detection failed
+        return
 
     event_type = "opened" if current_state == 'open' else "closed"
     face_status = "yes" if face_result == 'yes' else "no"
     face_confidence = confidence
 
-    occupancy_changed = face_status == "detected"
+    occupancy_changed = face_status == "yes"
 
-    print(f"\nDoor {event_type}, Face {face_status} (Confidence: {confidence}%)")
+    print(f"\nDoor: {event_type}, Face: {face_status} (Confidence: {confidence}%)")
     publish_door_event(event_type, face_status, confidence, occupancy_changed) 
+    previous_door_state = current_state
+    time.sleep(1.0)
     update_display()  # Update the display after handling the door event
+    
 
 while True:
     door_motion = door_mpu6050.get_door_motion()
-    door_state = door_hcsr04.get_door_state()
+    door_state = door_state_sensor.get_door_state()
 
     # Check if door state changed AND occupancy changed
     if previous_door_state != door_state and occupancy_changed:
