@@ -26,7 +26,7 @@ class SmartDoorSystem:
         # Initialise components
         self.display = OLEDDisplay()
         self.door_state_sensor = DoorStateHCSR04(trig_pin=23, echo_pin=24, threshold_distance=4)
-        self.door_motion_sensor = DoorMotionMPU6050(i2c_address=0x68, movement_threshold=2.5, dt=0.2, alpha=0.97, timeout=20)
+        self.door_motion_sensor = DoorMotionMPU6050(i2c_address=0x68, movement_threshold=3, dt=0.2, alpha=0.97, timeout=20)
         self.face_detection = FaceDetection(confidence_threshold=95, timeout=10, width=320, height=240, fps=10)
 
         # Initialise MQTT client
@@ -75,14 +75,11 @@ class SmartDoorSystem:
         """
         door_state = "open" if self.previous_door_state == 'open' else "closed"
         face_display = f"Face: {self.face_status.capitalize()} ({self.face_confidence:.1f}%)"
+        
 
-        if self.occupancy_status:
-            print("Room: Occupied")
-        else:
-            print("Room: Unoccupied")
-
-        self.display.update_display(f"Occupancy: {str(self.occupancy_status).capitalize()}", f"Door: {door_state.capitalize()}", face_display)
-        print(f"Display updated: Occupancy: {str(self.occupancy_status).capitalize()}, Door: {door_state.capitalize()}, {face_display}")
+        room_occupancy = "Occupied" if self.occupancy_status == 'true' else "Unoccupied"
+        self.display.update_display(f"Room: {room_occupancy}", f"Door: {door_state.capitalize()}", face_display)
+        print(f"Display updated: Room: {room_occupancy}, Door: {door_state.capitalize()}, {face_display}")
     
     def handle_door_event(self, current_state):
         """

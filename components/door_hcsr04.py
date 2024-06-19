@@ -9,7 +9,7 @@ class DoorStateHCSR04:
         self.trig_line.request(consumer='hc-sr04-trig', type=gpiod.LINE_REQ_DIR_OUT, default_val=0)
         self.echo_line.request(consumer='hc-sr04-echo', type=gpiod.LINE_REQ_DIR_IN)
 
-        #Instance's global variables
+        # Global variables
         self.threshold_distance = threshold_distance
         self.previous_door_state = None
         self.last_change_time = None

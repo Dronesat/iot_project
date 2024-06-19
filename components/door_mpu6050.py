@@ -3,7 +3,7 @@ import time
 import math
 
 class DoorMotionMPU6050:
-    def __init__(self, i2c_address=0x68, movement_threshold=2.5, dt=0.2, alpha=0.97, timeout=20):
+    def __init__(self, i2c_address=0x68, movement_threshold=4, dt=0.2, alpha=0.97, timeout=20):
         """
         Initialise the DoorMotionSensor with given parameters.
         

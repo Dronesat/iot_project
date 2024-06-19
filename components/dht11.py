@@ -9,8 +9,8 @@ mqtt_server = "192.168.1.39"
 mqtt_username = "hieu"
 mqtt_password = "hieu"
 mqtt_port = 1883
-topic_temperature = "raspberrypi/dht11/temperature"
-topic_humidity = "raspberrypi/dht11/humidity"
+topic_temperature = "rpi/dht11/temperature"
+topic_humidity = "rpi/dht11/humidity"
 
 # DHT11 Sensor Setup
 sensor = adafruit_dht.DHT11(board.D14, use_pulseio=True)
