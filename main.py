@@ -1,10 +1,10 @@
 import time
 import json
 import paho.mqtt.client as mqtt
-from components.face_detection import FaceDetection
 from components.oled_display import OLEDDisplay
 from components.door_hcsr04 import DoorStateHCSR04
 from components.door_mpu6050 import DoorMotionMPU6050
+from gesture.gesture_recognition import HandGestureRecognition
 
 class SmartDoorSystem:
     def __init__(self, mqtt_server, mqtt_port, mqtt_username, mqtt_password):
@@ -13,21 +13,19 @@ class SmartDoorSystem:
         self.mqtt_port = mqtt_port
         self.mqtt_username = mqtt_username
         self.mqtt_password = mqtt_password
-        self.topic_door_events = "smart_door_system/door_events"
         self.topic_occupancy_status = "smart_door_system/occupancy_status"
+        self.topic_hand_gesture = "smart_door_system/hand_gesture"
         
         # Global Variables
         self.previous_door_state = None
-        self.occupancy_changed = False
-        self.occupancy_status = False  # Default occupancy statuss
-        self.face_status = "no"
-        self.face_confidence = 0
+        self.hand_gesture = None
+        self.hand_score = None
 
         # Initialise components
         self.display = OLEDDisplay()
         self.door_state_sensor = DoorStateHCSR04(trig_pin=23, echo_pin=24, threshold_distance=4)
-        self.door_motion_sensor = DoorMotionMPU6050(i2c_address=0x68, movement_threshold=3, dt=0.2, alpha=0.97, timeout=20)
-        self.face_detection = FaceDetection(confidence_threshold=95, timeout=10, width=320, height=240, fps=10)
+        self.door_motion_sensor = DoorMotionMPU6050(i2c_address=0x68, angular_velocity_threshold=3, dt=0.2, alpha=0.97, timeout=20)
+        self.model_path = '/home/hieu/project/gesture/hand_gesture_model.task'
 
         # Initialise MQTT client
         self.client = mqtt.Client()
@@ -56,30 +54,24 @@ class SmartDoorSystem:
             self.occupancy_status = msg.payload.decode()
             self.update_display()
 
-    def publish_door_event(self, event_type, face_status, confidence, occupancy_changed):
+    def publish_hand_gesture(self, event_type, hand_gesture, score):
         """
         Publish door event to the MQTT broker.
         """
         payload = json.dumps({
             "event_type": event_type,
-            "face_status": face_status,
-            "confidence": confidence,
-            "occupancy_changed": occupancy_changed,
+            "hand_gesture": hand_gesture,
+            "score": score,
             "timestamp": time.time()  
         })
-        self.client.publish(self.topic_door_events, payload)
+        self.client.publish(self.topic_hand_gesture, payload)
 
     def update_display(self):
         """
         Update the OLED display with current status.
         """
-        door_state = "open" if self.previous_door_state == 'open' else "closed"
-        face_display = f"Face: {self.face_status.capitalize()} ({self.face_confidence:.1f}%)"
-        
-
-        room_occupancy = "Occupied" if self.occupancy_status == 'true' else "Unoccupied"
-        self.display.update_display(f"Room: {room_occupancy}", f"Door: {door_state.capitalize()}", face_display)
-        print(f"Display updated: Room: {room_occupancy}, Door: {door_state.capitalize()}, {face_display}")
+        str_score = str(self.hand_score)  # Ensure hand_score is converted to string
+        self.display.update_display(f"Door: {self.previous_door_state}", f"Hand: {self.hand_gesture}", f"Score: {str_score}")
     
     def handle_door_event(self, current_state):
         """
@@ -90,22 +82,16 @@ class SmartDoorSystem:
         if door_motion != 'moving':
             return # Return if door is not in motion
         
-        # Face detection, also updating time elapsed on oled display
-        face_result, confidence = self.face_detection.run_detection()
-        if face_result is None:  
-            return # Return if face detection failed
-        
-        event_type = "opened" if current_state == 'open' else "closed"
-        self.face_status = "yes" if face_result == 'yes' else "no"
-        self.face_confidence = confidence
-
-        self.occupancy_changed = self.face_status == "yes"
-
-        print(f"\nDoor: {event_type}, Face: {self.face_status} (Confidence: {confidence}%)")
-        self.publish_door_event(event_type, self.face_status, confidence, self.occupancy_changed)
+        hand_gesture = HandGestureRecognition(model=self.model_path, stop_on_gesture=True)
+        result = hand_gesture.run()
+        self.hand_gesture = result.hand_gesture_name
+        self.hand_score = result.score
         self.previous_door_state = current_state
+        print(f"Door: {current_state}")
+        print(f'Result: {result.hand_gesture_name} ({result.score})')
         self.update_display()  # Update the display after handling the door event
-
+        self.publish_hand_gesture(current_state,self.hand_gesture,self.hand_score)
+        
     def run(self):
         """
         Main loop to continuously monitor door state and handle events.
@@ -113,11 +99,6 @@ class SmartDoorSystem:
         try:
             while True:
                 door_state = self.door_state_sensor.get_door_state()
-
-                # Check if door state changed AND occupancy changed
-                if self.previous_door_state != door_state and self.occupancy_changed:
-                    print(f"\nOccupancy status has likely changed!")
-                    self.occupancy_changed = False  # Reset
 
                 if self.previous_door_state != door_state:
                     self.handle_door_event(door_state)

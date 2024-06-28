@@ -3,7 +3,7 @@ import time
 import math
 
 class DoorMotionMPU6050:
-    def __init__(self, i2c_address=0x68, movement_threshold=4, dt=0.2, alpha=0.97, timeout=20):
+    def __init__(self, i2c_address=0x68, angular_velocity_threshold=4, dt=0.2, alpha=0.97, timeout=20):
         """
         Initialise the DoorMotionSensor with given parameters.
         
@@ -14,7 +14,7 @@ class DoorMotionMPU6050:
         :param timeout: Timeout for motion state tracking (seconds).
         """
         self.mpu6050 = mpu6050.mpu6050(i2c_address)  # I2C Interface: Address 0x68
-        self.movement_threshold = movement_threshold  # Degrees per second
+        self.angular_velocity_threshold = angular_velocity_threshold  # Degrees per second
         self.dt = dt  # Time interval for reading sensor data
         self.alpha = alpha  # Weight for the gyroscope in the complementary filter
         self.timeout = timeout  # Timeout for motion state tracking
@@ -30,8 +30,6 @@ class DoorMotionMPU6050:
         
         # Global Variables
         self.previous_door_motion = None  
-        self.last_change_time = None
-        self.time_since_last_change = None
 
     def read_sensor_data(self):
         try:
@@ -52,27 +50,15 @@ class DoorMotionMPU6050:
             if accel_data is None or gyro_data is None:
                 return self.door_state
 
-            gyro_x = gyro_data['x'] - self.initial_gyro_x  # Correct the gyro reading
-
-            # Estimate angle from accelerometer (door is vertical)
-            accel_angle = math.atan2(accel_data['y'], accel_data['z']) * 180 / math.pi
-
-            # Calculate angle change from gyro
-            gyro_angle = gyro_x * self.dt
-
-            # Apply complementary filter to fuse the data
-            self.angle = self.alpha * (self.angle + gyro_angle) + (1 - self.alpha) * accel_angle
-
-            # Estimate angular velocity
-            angular_velocity_z = gyro_x
+            # Correct the gyro reading
+            angular_velocity_z = gyro_data['x'] - self.initial_gyro_x  
 
             # Determine door state based on angular velocity
-            if abs(angular_velocity_z) > self.movement_threshold:
+            if abs(angular_velocity_z) > self.angular_velocity_threshold:
                 self.door_state = "moving"
             else:
                 self.door_state = "stationary"
 
-            #print(f"Angle (Filtered): {angle:.1f} degrees, Angular Velocity (Z): {angular_velocity_z:.1f} degrees/s, Door state: {door_state}")
             time.sleep(self.dt)
             return self.door_state
 
@@ -80,28 +66,12 @@ class DoorMotionMPU6050:
             print(f"Error in get_door_motion: {error}")
             return self.door_state
 
-    def get_door_motion_time(self):
-        current_door_motion = self.get_door_motion()
-
-        # Door state has changed
-        if current_door_motion != self.previous_door_motion:
-            self.last_change_time = time.time()  
-            self.time_since_last_change = 0.0  # Reset the time counter when state changes
-            self.previous_door_motion = current_door_motion
-
-        elif self.last_change_time is not None:  # Only calculate if there was a previous change
-            self.time_since_last_change = round(time.time() - self.last_change_time, 1)
-            if self.time_since_last_change > self.timeout:
-                self.time_since_last_change = None  # Stop tracking time after timeout
-
-        return current_door_motion, self.time_since_last_change
-
     def run(self):
         while True:
-            door_motion, time_since_change = self.get_door_motion_time()
+            door_motion= self.get_door_motion()
 
-            if time_since_change is not None or door_motion != self.previous_door_motion:
-                print(f"Door motion: {door_motion} (time since change: {time_since_change}s)")
+            if door_motion != self.previous_door_motion:
+                print(f"Door motion: {door_motion}")
                 self.previous_door_motion = door_motion
 
             time.sleep(0.1)
