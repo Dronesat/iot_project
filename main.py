@@ -14,7 +14,7 @@ class SmartDoorSystem:
         self.mqtt_username = mqtt_username
         self.mqtt_password = mqtt_password
         self.topic_occupancy_status = "smart_door_system/occupancy_status"
-        self.topic_hand_gesture = "smart_door_system/hand_gesture"
+        self.topic_hand_gesture = "rpi/door_hand_gesture"
         
         # Global Variables
         self.previous_door_state = None

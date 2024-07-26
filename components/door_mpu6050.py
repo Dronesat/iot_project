@@ -3,20 +3,18 @@ import time
 import math
 
 class DoorMotionMPU6050:
-    def __init__(self, i2c_address=0x68, angular_velocity_threshold=4, dt=0.2, alpha=0.97, timeout=20):
+    def __init__(self, i2c_address=0x68, angular_velocity_threshold=4, dt=0.2, timeout=20):
         """
         Initialise the DoorMotionSensor with given parameters.
         
         :param i2c_address: I2C address of the MPU6050 sensor.
         :param movement_threshold: Threshold for detecting door movement (degrees per second).
         :param dt: Time interval for reading sensor data (seconds).
-        :param alpha: Weight for the gyroscope data in the complementary filter.
         :param timeout: Timeout for motion state tracking (seconds).
         """
         self.mpu6050 = mpu6050.mpu6050(i2c_address)  # I2C Interface: Address 0x68
         self.angular_velocity_threshold = angular_velocity_threshold  # Degrees per second
         self.dt = dt  # Time interval for reading sensor data
-        self.alpha = alpha  # Weight for the gyroscope in the complementary filter
         self.timeout = timeout  # Timeout for motion state tracking
         
         # Variables to track door state, angle, and angular velocity
