@@ -138,7 +138,7 @@ class HandGestureRecognition:
             frame_height, frame_width = current_frame.shape[:2]
             x_min_px = int(x_min * frame_width)
             y_min_px = int(y_min * frame_height)
-            y_max_px = int(y_max * frame_height)
+            y_max_px = int(y_max * frame_height)    
 
             if self.recognition_result_list[0].gestures:
                 gesture = self.recognition_result_list[0].gestures[hand_index]

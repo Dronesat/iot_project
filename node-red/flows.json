@@ -1,0 +1,1332 @@
+[
+    {
+        "id": "dff0a5af198a014a",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "abf7079a.653be8",
+        "type": "mqtt in",
+        "z": "dff0a5af198a014a",
+        "name": "",
+        "topic": "esp32/ds18b20/temperatureC",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "10e78a89.5b4fd5",
+        "nl": false,
+        "rap": false,
+        "inputs": 0,
+        "x": 140,
+        "y": 1360,
+        "wires": [
+            [
+                "0b673ce85a042f67",
+                "6bbe429370d5430b",
+                "3b39041589fc526a"
+            ]
+        ]
+    },
+    {
+        "id": "5f8bebc13ac0fbdf",
+        "type": "mqtt out",
+        "z": "dff0a5af198a014a",
+        "name": "",
+        "topic": "esp32/radiator_servo",
+        "qos": "2",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "10e78a89.5b4fd5",
+        "x": 560,
+        "y": 1620,
+        "wires": []
+    },
+    {
+        "id": "e0455918a3994271",
+        "type": "ui_gauge",
+        "z": "dff0a5af198a014a",
+        "name": "",
+        "group": "c414226c3dd8f139",
+        "order": 6,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Radiator Level",
+        "label": "Level",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "5",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 540,
+        "y": 1680,
+        "wires": []
+    },
+    {
+        "id": "04dfcd0fef49d543",
+        "type": "ui_slider",
+        "z": "dff0a5af198a014a",
+        "name": "",
+        "label": "Manual Level",
+        "tooltip": "Control Servo",
+        "group": "c414226c3dd8f139",
+        "order": 7,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "outs": "end",
+        "topic": "topic",
+        "topicType": "flow",
+        "min": 0,
+        "max": "5",
+        "step": "1",
+        "className": "",
+        "x": 670,
+        "y": 1020,
+        "wires": [
+            [
+                "e7d82471a271556f"
+            ]
+        ]
+    },
+    {
+        "id": "ae6fb07a0d5b8b5d",
+        "type": "mqtt in",
+        "z": "dff0a5af198a014a",
+        "name": "",
+        "topic": "rpi/dht11/temperature",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "10e78a89.5b4fd5",
+        "nl": false,
+        "rap": false,
+        "inputs": 0,
+        "x": 160,
+        "y": 1440,
+        "wires": [
+            [
+                "6cde4e759dd3d3ea",
+                "0b673ce85a042f67",
+                "1fd3468620d856c2"
+            ]
+        ]
+    },
+    {
+        "id": "0b40c845f474dcf6",
+        "type": "mqtt in",
+        "z": "dff0a5af198a014a",
+        "name": "",
+        "topic": "rpi/dht11/humidity",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "10e78a89.5b4fd5",
+        "nl": false,
+        "rap": false,
+        "inputs": 0,
+        "x": 200,
+        "y": 520,
+        "wires": [
+            [
+                "f3e691e7e7a842ab",
+                "12aa542e1f91f136"
+            ]
+        ]
+    },
+    {
+        "id": "2f1266228aa1f12d",
+        "type": "influxdb out",
+        "z": "dff0a5af198a014a",
+        "influxdb": "c72fd527ed2074ce",
+        "name": "",
+        "measurement": "raspberrypi/dht11/temperature",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "ms",
+        "retentionPolicyV18Flux": "",
+        "org": "organisation",
+        "bucket": "bucket",
+        "x": 1240,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "f3e691e7e7a842ab",
+        "type": "influxdb out",
+        "z": "dff0a5af198a014a",
+        "influxdb": "c72fd527ed2074ce",
+        "name": "",
+        "measurement": "raspberrypi/dht11/humidity",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "ms",
+        "retentionPolicyV18Flux": "",
+        "org": "organisation",
+        "bucket": "bucket",
+        "x": 530,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "08faad23bb9fe2d9",
+        "type": "influxdb out",
+        "z": "dff0a5af198a014a",
+        "influxdb": "c72fd527ed2074ce",
+        "name": "",
+        "measurement": "esp32-radiator/temperatureC",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "ms",
+        "retentionPolicyV18Flux": "",
+        "org": "organisation",
+        "bucket": "bucket",
+        "x": 1240,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "0b673ce85a042f67",
+        "type": "ui_chart",
+        "z": "dff0a5af198a014a",
+        "name": "",
+        "group": "294e286ee3666271",
+        "order": 3,
+        "width": 6,
+        "height": 4,
+        "label": "Room Temperature",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 390,
+        "y": 1400,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "6bbe429370d5430b",
+        "type": "ui_text",
+        "z": "dff0a5af198a014a",
+        "group": "294e286ee3666271",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "DS18B20 Temp (ESP32)",
+        "format": "{{msg.payload}} °C",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 410,
+        "y": 1360,
+        "wires": []
+    },
+    {
+        "id": "6cde4e759dd3d3ea",
+        "type": "ui_text",
+        "z": "dff0a5af198a014a",
+        "group": "294e286ee3666271",
+        "order": 5,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "DHT11 Temp (RPi)",
+        "format": "{{msg.payload}} °C",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 390,
+        "y": 1440,
+        "wires": []
+    },
+    {
+        "id": "eb5426c3792a9ef4",
+        "type": "mqtt in",
+        "z": "dff0a5af198a014a",
+        "name": "",
+        "topic": "rpi/door_hand_gesture",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "10e78a89.5b4fd5",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 200,
+        "y": 680,
+        "wires": [
+            [
+                "79a22aa27b273810",
+                "3479491d7e744998",
+                "67736b206ba77a27",
+                "4907344086ba103b",
+                "a1f1676844c15836",
+                "ef5b6ae1c09eed2f"
+            ]
+        ]
+    },
+    {
+        "id": "79a22aa27b273810",
+        "type": "ui_text",
+        "z": "dff0a5af198a014a",
+        "group": "196e1896505bec89",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Door Event",
+        "format": "{{msg.payload.event_type}}",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 490,
+        "y": 680,
+        "wires": []
+    },
+    {
+        "id": "3479491d7e744998",
+        "type": "ui_text",
+        "z": "dff0a5af198a014a",
+        "group": "196e1896505bec89",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Hand Gesture",
+        "format": "{{msg.payload.hand_gesture}}",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 500,
+        "y": 720,
+        "wires": []
+    },
+    {
+        "id": "67736b206ba77a27",
+        "type": "ui_text",
+        "z": "dff0a5af198a014a",
+        "group": "196e1896505bec89",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Score",
+        "format": "{{msg.payload.score}}",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 470,
+        "y": 760,
+        "wires": []
+    },
+    {
+        "id": "e0af1b634917771c",
+        "type": "ui_text",
+        "z": "dff0a5af198a014a",
+        "group": "196e1896505bec89",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "When",
+        "format": "{{msg.payload.timestamp}}",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 470,
+        "y": 800,
+        "wires": []
+    },
+    {
+        "id": "4907344086ba103b",
+        "type": "moment",
+        "z": "dff0a5af198a014a",
+        "name": "",
+        "topic": "",
+        "input": "",
+        "inputType": "date",
+        "inTz": "ETC/UTC",
+        "adjAmount": 0,
+        "adjType": "days",
+        "adjDir": "add",
+        "format": "Do MMMM, h:mm a",
+        "locale": "en-GB",
+        "output": "payload.timestamp",
+        "outputType": "msg",
+        "outTz": "Europe/London",
+        "x": 280,
+        "y": 800,
+        "wires": [
+            [
+                "e0af1b634917771c"
+            ]
+        ]
+    },
+    {
+        "id": "6fe6f1348ded00b6",
+        "type": "ui_text",
+        "z": "dff0a5af198a014a",
+        "group": "8ee9c5f4def678ee",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "HAND GESTURE",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 750,
+        "y": 840,
+        "wires": []
+    },
+    {
+        "id": "a1f1676844c15836",
+        "type": "function",
+        "z": "dff0a5af198a014a",
+        "name": "Display Hand Gesture",
+        "func": "// Extract data from msg.payload\nconst hand_gesture = msg.payload.hand_gesture;\nlet text = {};\n\nswitch (hand_gesture) {\n    case \"thumbs_up\":\n        text = \"Thumbs Up\"\n        break\n    case \"one\":\n        text = \"One\"\n        break\n    case \"two\":\n        text = \"Two\"\n        break\n    case \"three\":\n        text = \"Three\"\n        break\n    case \"four\":\n        text = \"Four\"\n        break\n}\n\nmsg.payload = text;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 520,
+        "y": 840,
+        "wires": [
+            [
+                "6fe6f1348ded00b6"
+            ]
+        ]
+    },
+    {
+        "id": "fd6e6dd00fe67c6e",
+        "type": "ui_numeric",
+        "z": "dff0a5af198a014a",
+        "name": "",
+        "label": "Target Temperature",
+        "tooltip": "",
+        "group": "c414226c3dd8f139",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "wrap": false,
+        "passthru": true,
+        "topic": "topic",
+        "topicType": "msg",
+        "format": "{{value}} °C",
+        "min": "10",
+        "max": "30",
+        "step": "0.5",
+        "className": "",
+        "x": 490,
+        "y": 280,
+        "wires": [
+            [
+                "d8867a3055f24588"
+            ]
+        ]
+    },
+    {
+        "id": "519c96d18729fe18",
+        "type": "ui_text",
+        "z": "dff0a5af198a014a",
+        "group": "c414226c3dd8f139",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Room Temperature",
+        "format": "{{msg.payload}} °C",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 550,
+        "y": 1540,
+        "wires": []
+    },
+    {
+        "id": "5957723dbe49e6b4",
+        "type": "function",
+        "z": "dff0a5af198a014a",
+        "name": "Average Temperature",
+        "func": "let dht11_temp = flow.get(\"dht11_temp\");\nlet ds18b20_temp = flow.get(\"ds18b20_temp\");\n\n// Ensure that the incoming message has the two required temperature readings\nif (dht11_temp !== undefined && ds18b20_temp !== undefined) {\n    // Extract the temperature readings from the message payload\n    let temp1 = parseFloat(dht11_temp);\n    let temp2 = parseFloat(ds18b20_temp);\n\n    // Calculate the average temperature\n    let averageTemp = (temp1 + temp2) / 2;\n\n    // Set the average temperature as the new message payload\n    msg.payload = averageTemp.toFixed(2);  // Optional: format to 2 decimal places\n    msg.topic = \"current_temp\";  // Set the topic\n} else {\n    // If the message does not contain the required readings, return an error\n    msg.payload = \"Error: Missing temperature readings\";\n    msg.topic = \"error\";  // Set the topic for error\n}\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 300,
+        "y": 1540,
+        "wires": [
+            [
+                "519c96d18729fe18",
+                "7f7f689dbb76ed2b"
+            ]
+        ]
+    },
+    {
+        "id": "3b39041589fc526a",
+        "type": "function",
+        "z": "dff0a5af198a014a",
+        "name": "Set Flow Variable: ds18b20_temp",
+        "func": "const temp = msg.payload;\n\nflow.set(\"ds18b20_temp\", temp)\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 680,
+        "y": 1360,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "1fd3468620d856c2",
+        "type": "function",
+        "z": "dff0a5af198a014a",
+        "name": "Set Flow Variable: dht11_temp",
+        "func": "const temp = msg.payload;\n\nflow.set(\"dht11_temp\", temp)\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 630,
+        "y": 1440,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "7ee0620a1aaac981",
+        "type": "inject",
+        "z": "dff0a5af198a014a",
+        "name": "Interval",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "1",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 100,
+        "y": 1540,
+        "wires": [
+            [
+                "5957723dbe49e6b4"
+            ]
+        ]
+    },
+    {
+        "id": "d8867a3055f24588",
+        "type": "function",
+        "z": "dff0a5af198a014a",
+        "name": "Set Flow Variable: target_temp",
+        "func": "const target_temp = msg.payload;\n\nflow.set(\"target_temp\", target_temp)\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 730,
+        "y": 280,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "7f7f689dbb76ed2b",
+        "type": "function",
+        "z": "dff0a5af198a014a",
+        "name": "Thermal Control",
+        "func": "let current_temp = msg.payload;\nlet target_temp = flow.get(\"target_temp\");\nlet manual_radiator_level = flow.get(\"manual_radiator_level\");\nlet thermal_control_mode = flow.get(\"thermal_control_mode\");\nlet occupancy_status = flow.get(\"occupancy_status\");\n\nif (thermal_control_mode == \"manual\") {\n    if (manual_radiator_level > 0) {\n        msg.status = \"Heating\";\n        msg.payload = manual_radiator_level;\n    } else {\n        msg.status = \"Not Heating\";\n        msg.payload = 0;\n    }\n} else if (thermal_control_mode == \"auto\") {\n    \n    if (current_temp < target_temp) {\n        msg.status = \"Heating\";\n        msg.payload = 5; // Full power\n    } else {\n        msg.status = \"Not Heating\";\n        msg.payload = 0; // Turn off\n    }\n}\n\nmsg.topic = \"thermal_control\";\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 320,
+        "y": 1620,
+        "wires": [
+            [
+                "57e8a8edc8ff1f5b",
+                "5f8bebc13ac0fbdf",
+                "e0455918a3994271"
+            ]
+        ]
+    },
+    {
+        "id": "e7d82471a271556f",
+        "type": "function",
+        "z": "dff0a5af198a014a",
+        "name": "Context Variable: user_radiator_level",
+        "func": "let radiator_level = msg.payload;\n\nflow.set(\"manual_radiator_level\",radiator_level)\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 910,
+        "y": 1020,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "57e8a8edc8ff1f5b",
+        "type": "ui_text",
+        "z": "dff0a5af198a014a",
+        "group": "c414226c3dd8f139",
+        "order": 5,
+        "width": 0,
+        "height": 0,
+        "name": "Heating Status",
+        "label": "Status",
+        "format": "{{msg.status}}",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 540,
+        "y": 1740,
+        "wires": []
+    },
+    {
+        "id": "670d7391813cb32e",
+        "type": "function",
+        "z": "dff0a5af198a014a",
+        "name": "Context Variable: thermal_control_mode",
+        "func": "let thermal_control_type = msg.payload;\n\nflow.set(\"thermal_control_mode\", thermal_control_type)\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 880,
+        "y": 1080,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "dde2f78d2b77fa78",
+        "type": "ui_dropdown",
+        "z": "dff0a5af198a014a",
+        "name": "",
+        "label": "Mode",
+        "tooltip": "",
+        "place": "",
+        "group": "c414226c3dd8f139",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "multiple": false,
+        "options": [
+            {
+                "label": "Automatic (PID Controller)",
+                "value": "auto",
+                "type": "str"
+            },
+            {
+                "label": "Manual",
+                "value": "manual",
+                "type": "str"
+            }
+        ],
+        "payload": "",
+        "topic": "topic",
+        "topicType": "msg",
+        "className": "",
+        "x": 650,
+        "y": 1080,
+        "wires": [
+            [
+                "670d7391813cb32e"
+            ]
+        ]
+    },
+    {
+        "id": "12aa542e1f91f136",
+        "type": "ui_text",
+        "z": "dff0a5af198a014a",
+        "group": "294e286ee3666271",
+        "order": 6,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "DHT11 Humidity (RPi)",
+        "format": "{{msg.payload}} %",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 480,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "3b0e77102a467211",
+        "type": "openweathermap",
+        "z": "dff0a5af198a014a",
+        "name": "",
+        "wtype": "current",
+        "lon": "",
+        "lat": "",
+        "city": "Portsmouth",
+        "country": "GB",
+        "language": "en",
+        "x": 290,
+        "y": 160,
+        "wires": [
+            [
+                "6dd2210b45099e76",
+                "61a00318bf4824f2"
+            ]
+        ]
+    },
+    {
+        "id": "324f0f79475022ad",
+        "type": "inject",
+        "z": "dff0a5af198a014a",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "10",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 130,
+        "y": 160,
+        "wires": [
+            [
+                "3b0e77102a467211"
+            ]
+        ]
+    },
+    {
+        "id": "6dd2210b45099e76",
+        "type": "change",
+        "z": "dff0a5af198a014a",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.tempc",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 480,
+        "y": 200,
+        "wires": [
+            [
+                "b5df3288ae8792f4",
+                "d860c2161a856ecd"
+            ]
+        ]
+    },
+    {
+        "id": "b5df3288ae8792f4",
+        "type": "ui_text",
+        "z": "dff0a5af198a014a",
+        "group": "294e286ee3666271",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Outside Temperature",
+        "format": "{{msg.payload}} °C",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 700,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "61a00318bf4824f2",
+        "type": "change",
+        "z": "dff0a5af198a014a",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.location",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 480,
+        "y": 160,
+        "wires": [
+            [
+                "fd373b0797357b5a"
+            ]
+        ]
+    },
+    {
+        "id": "fd373b0797357b5a",
+        "type": "ui_text",
+        "z": "dff0a5af198a014a",
+        "group": "294e286ee3666271",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "City",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 650,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "b4f55449557d2cbe",
+        "type": "ui_switch",
+        "z": "dff0a5af198a014a",
+        "name": "",
+        "label": "Room always (+5 °C) than outside temp",
+        "tooltip": "Temp inside will automatically adjust to be higher than outside temp. User can adjust the level ",
+        "group": "c414226c3dd8f139",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "decouple": "false",
+        "topic": "topic",
+        "topicType": "msg",
+        "style": "",
+        "onvalue": "true",
+        "onvalueType": "bool",
+        "onicon": "",
+        "oncolor": "",
+        "offvalue": "false",
+        "offvalueType": "bool",
+        "officon": "",
+        "offcolor": "",
+        "animate": false,
+        "className": "",
+        "x": 660,
+        "y": 1200,
+        "wires": [
+            [
+                "710c5380f99c02e5"
+            ]
+        ]
+    },
+    {
+        "id": "710c5380f99c02e5",
+        "type": "function",
+        "z": "dff0a5af198a014a",
+        "name": "Context variable: room_temp_always_higher",
+        "func": "let setting = msg.payload\n\nif (setting == true) {\n    flow.set(\"room_temp_always_higher\",true)\n} else if (setting == false){\n    flow.set(\"room_temp_always_higher\", false)\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1010,
+        "y": 1200,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "ff358c5a7f6da65b",
+        "type": "function",
+        "z": "dff0a5af198a014a",
+        "name": "Room > 5°C",
+        "func": "let outside_temp = flow.get(\"outside_temp\")\nlet room_temp_always_higher = flow.get(\"room_temp_always_higher\")\n\nif (room_temp_always_higher == true){\n    msg.payload = outside_temp + 5\n    return msg;\n} else if (room_temp_always_higher == false) {\n}\n\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 290,
+        "y": 280,
+        "wires": [
+            [
+                "fd6e6dd00fe67c6e"
+            ]
+        ]
+    },
+    {
+        "id": "d860c2161a856ecd",
+        "type": "function",
+        "z": "dff0a5af198a014a",
+        "name": "Context variable: outside_temp",
+        "func": "let outside_temp = msg.payload\nflow.set(\"outside_temp\",outside_temp)\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 730,
+        "y": 240,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "231a505eabdfdaf3",
+        "type": "inject",
+        "z": "dff0a5af198a014a",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "10",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 110,
+        "y": 280,
+        "wires": [
+            [
+                "ff358c5a7f6da65b"
+            ]
+        ]
+    },
+    {
+        "id": "ef5b6ae1c09eed2f",
+        "type": "switch",
+        "z": "dff0a5af198a014a",
+        "name": "",
+        "property": "payload.hand_gesture",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "thumbs_up",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "one",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "two",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "three",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "four",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 5,
+        "x": 170,
+        "y": 1080,
+        "wires": [
+            [
+                "48f4f30769a7f3fb"
+            ],
+            [
+                "76d143ecf0a66b38",
+                "ec15b98ef8de7fb0"
+            ],
+            [
+                "dd3ec642f6c3bd48",
+                "ec15b98ef8de7fb0"
+            ],
+            [
+                "148cbc740e90a544"
+            ],
+            [
+                "e7c05c1ba652720d"
+            ]
+        ]
+    },
+    {
+        "id": "e46725d37b20ea2f",
+        "type": "ui_template",
+        "z": "dff0a5af198a014a",
+        "group": "8ee9c5f4def678ee",
+        "name": "Gesture Action",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "format": "<div>\"Thumbs up\": Turn on auto PID controller</div>\n<div>\"One\": OFF (Mode: manual & Level: 0)</div>\n<div>\"Two\": ON (Mode: manual & Level: 5)</div>\n<div>\"Three\": Turn on auto +5</div>\n<div>\"Four\": Turn off auto +5</div>\n<div>\"Timeout\": Do nothing</div>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 760,
+        "y": 760,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "48f4f30769a7f3fb",
+        "type": "function",
+        "z": "dff0a5af198a014a",
+        "name": "Set Mode to Auto",
+        "func": "msg.payload = \"auto\"\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 410,
+        "y": 980,
+        "wires": [
+            [
+                "dde2f78d2b77fa78"
+            ]
+        ]
+    },
+    {
+        "id": "76d143ecf0a66b38",
+        "type": "function",
+        "z": "dff0a5af198a014a",
+        "name": "Set Level to 0",
+        "func": "msg.payload = 0\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 1080,
+        "wires": [
+            [
+                "04dfcd0fef49d543"
+            ]
+        ]
+    },
+    {
+        "id": "ec15b98ef8de7fb0",
+        "type": "function",
+        "z": "dff0a5af198a014a",
+        "name": "Set Mode to Manual",
+        "func": "msg.payload = \"manual\"\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 420,
+        "y": 1020,
+        "wires": [
+            [
+                "dde2f78d2b77fa78"
+            ]
+        ]
+    },
+    {
+        "id": "dd3ec642f6c3bd48",
+        "type": "function",
+        "z": "dff0a5af198a014a",
+        "name": "Set Level to 5",
+        "func": "msg.payload = 5\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 1120,
+        "wires": [
+            [
+                "04dfcd0fef49d543"
+            ]
+        ]
+    },
+    {
+        "id": "148cbc740e90a544",
+        "type": "function",
+        "z": "dff0a5af198a014a",
+        "name": "Set +5 to On",
+        "func": "msg.payload = true\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 1180,
+        "wires": [
+            [
+                "b4f55449557d2cbe"
+            ]
+        ]
+    },
+    {
+        "id": "e7c05c1ba652720d",
+        "type": "function",
+        "z": "dff0a5af198a014a",
+        "name": "Set +5 to Off",
+        "func": "msg.payload = false\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 1220,
+        "wires": [
+            [
+                "b4f55449557d2cbe"
+            ]
+        ]
+    },
+    {
+        "id": "10e78a89.5b4fd5",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "localhost",
+        "port": "1883",
+        "tls": "fdd82762141290c7",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "c414226c3dd8f139",
+        "type": "ui_group",
+        "name": "Room Thermal Control",
+        "tab": "e7c46d5e.a1283",
+        "order": 3,
+        "disp": true,
+        "width": 6,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "c72fd527ed2074ce",
+        "type": "influxdb",
+        "hostname": "127.0.0.1",
+        "port": "8086",
+        "protocol": "http",
+        "database": "mydb",
+        "name": "mydb",
+        "usetls": false,
+        "tls": "fdd82762141290c7",
+        "influxdbVersion": "1.x",
+        "url": "http://localhost:8086",
+        "timeout": "10",
+        "rejectUnauthorized": true
+    },
+    {
+        "id": "294e286ee3666271",
+        "type": "ui_group",
+        "name": "Environment",
+        "tab": "e7c46d5e.a1283",
+        "order": 2,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "196e1896505bec89",
+        "type": "ui_group",
+        "name": "Smart Door System",
+        "tab": "e7c46d5e.a1283",
+        "order": 5,
+        "disp": true,
+        "width": 6,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "8ee9c5f4def678ee",
+        "type": "ui_group",
+        "name": "Hand Gesture Rules",
+        "tab": "e7c46d5e.a1283",
+        "order": 4,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "fdd82762141290c7",
+        "type": "tls-config",
+        "name": "",
+        "cert": "",
+        "key": "",
+        "ca": "",
+        "certname": "",
+        "keyname": "",
+        "caname": "",
+        "servername": "",
+        "verifyservercert": true,
+        "alpnprotocol": ""
+    },
+    {
+        "id": "e7c46d5e.a1283",
+        "type": "ui_tab",
+        "name": "Smart Radiator Control System",
+        "icon": "dashboard",
+        "order": 2,
+        "disabled": false,
+        "hidden": false,
+        "info": "Sadsdas"
+    }
+]
