@@ -1,6 +1,7 @@
 # Smart Radiator System with Hand Gesture Control
 
 This project demonstrates an IoT smart radiator control system that use hand gesture recognition to optimise thermal management in residential household.
+<img src="https://github.com/user-attachments/assets/0f112c8d-345c-4347-ae7f-1a93e3a3c52b" width="650" height="280">
 
 ## Features
 
